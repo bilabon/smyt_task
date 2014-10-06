@@ -10,3 +10,4 @@ django-webtest
 django-extensions
 
 django-annoying
+django-modelish
