@@ -1,0 +1,12 @@
+django>=1.6,<1.7
+south
+
+pep8
+pylint
+pyflakes
+
+webtest
+django-webtest
+django-extensions
+
+django-annoying

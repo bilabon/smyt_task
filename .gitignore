@@ -1,0 +1,9 @@
+*.pyc
+*.pyo
+*.db
+*.log
+*.pid
+*.mo
+*.DS_Store
+*.yml
+.env/
