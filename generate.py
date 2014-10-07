@@ -18,7 +18,7 @@ def simple_error(m):
 
 
 def generate_source(source, grammar=DEFAULT_GRAMMARISH):
-    """Generating text for admin.py and models.py"""
+    """Generating code for admin.py and models.py"""
 
     global models_py
     models_py = []
@@ -65,7 +65,7 @@ def generate_source(source, grammar=DEFAULT_GRAMMARISH):
             indent -= 1
         indent -= 1
 
-    # Create text for admin.py
+    # Create code for admin.py
     admin_py = []
     admin_py.append('from django.contrib import admin')
     admin_py.append(
@@ -75,7 +75,7 @@ def generate_source(source, grammar=DEFAULT_GRAMMARISH):
         admin_py.append("admin.site.register({})".format(name))
     admin_py = '\n'.join(admin_py)
 
-    # Create text for models.py
+    # Create code for models.py
     models_py = re.sub(',\)|\\n\)|,\\n\)', ')', ''.join(models_py))
     return models_py, admin_py
 

@@ -11,9 +11,15 @@ class User(models.Model):
     date_joined = models.DateTimeField(
         'Date of joining')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Room(models.Model):
     department = models.CharField(
         max_length=200,
         blank=True)
     spots = models.IntegerField()
+
+    def __unicode__(self):
+        return self.department

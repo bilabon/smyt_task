@@ -21,10 +21,10 @@ Room:
 
 
 class Setting(models.Model):
-    title = models.TextField('View of Models', default=default)
+    title = models.TextField('Specifications of Models', default=default)
 
     class Meta:
-        verbose_name_plural = "Setting of models"
+        verbose_name_plural = "Setting of Models"
 
     def __unicode__(self):
         return self.title
