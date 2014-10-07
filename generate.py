@@ -74,6 +74,7 @@ def generate_source(source, grammar=DEFAULT_GRAMMARISH):
     )
     for name in name_models:
         admin_py.append("admin.site.register({})".format(name))
+    del name_models
     admin_py = '\n'.join(admin_py)
 
     # Create text for models.py
