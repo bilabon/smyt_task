@@ -8,8 +8,7 @@ from yaml import load
 from modelish.generate import DEFAULT_GRAMMARISH, simple_quote
 from smyt_task import settings
 
-HELP = "usage:  modelish <source.yml> [--grammar=<grammar.yml> --extra-grammar"
-"=<grammar.yml>]"
+HELP = "usage:  modelish <source.yml>"
 
 
 def simple_error(m):
@@ -74,7 +73,6 @@ def generate_source(source, grammar=DEFAULT_GRAMMARISH):
     )
     for name in name_models:
         admin_py.append("admin.site.register({})".format(name))
-    del name_models
     admin_py = '\n'.join(admin_py)
 
     # Create text for models.py
