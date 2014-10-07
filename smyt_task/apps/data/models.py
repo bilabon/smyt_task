@@ -11,6 +11,7 @@ class User(models.Model):
     date_joined = models.DateTimeField(
         'Date of joining')
 
+
 class Room(models.Model):
     department = models.CharField(
         max_length=200,

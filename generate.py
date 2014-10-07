@@ -2,12 +2,12 @@
 
 import os
 import sys
+import re
 import modelish.args as m_args
 from yaml import load
 from modelish.generate import DEFAULT_GRAMMARISH, simple_quote
 from smyt_task import settings
 
-APPS_DIR = settings.root('apps')
 HELP = "usage:  modelish <source.yml> [--grammar=<grammar.yml> --extra-grammar"
 "=<grammar.yml>]"
 
@@ -19,22 +19,27 @@ def simple_error(m):
 
 
 def generate_source(source, grammar=DEFAULT_GRAMMARISH):
-    global models_py, name_model
-    models_py = "from django.db import models\n\n"
+    """Generating text for admin.py and models.py"""
+
+    global models_py
+    models_py = []
     name_models = []
+    models_py.append("from django.db import models\n")
+
     indent = 0
 
     def add_line(s):
         global models_py
-        models_py += "{}{}\n".format(' ' * 4 * indent, s)
+        models_py.append("{}{}\n".format(' ' * 4 * indent, s))
+
     for model, info in source.items():
-        add_line("\nclass {}(models.Model):".format(model))
+        add_line("\n\nclass {}(models.Model):".format(model))
         indent += 1
         name_models.append(model)
         try:
             docs = info.pop('doc')
             add_line('''"""{}"""'''.format(docs))
-            models_py += '\n'
+            models_py.append('\n')
         except KeyError:
             pass
         for field, fdata in info.items():
@@ -57,26 +62,23 @@ def generate_source(source, grammar=DEFAULT_GRAMMARISH):
             field_info.update(fdata)
             for kwarg, value in field_info.items():
                 add_line("{}={},".format(kwarg, simple_quote(value)))
-            models_py = models_py.rstrip(',\n)')
-            models_py += ')\n'
+            models_py.append(')\n')
             indent -= 1
         indent -= 1
 
     # Create text for admin.py
     admin_py = []
     admin_py.append('from django.contrib import admin')
-    admin_py.append('from .models import {}\n\n'.format(', '.join(name_models)))
+    admin_py.append(
+        'from .models import {}\n\n'.format(', '.join(name_models))
+    )
     for name in name_models:
         admin_py.append("admin.site.register({})".format(name))
     admin_py = '\n'.join(admin_py)
 
+    # Create text for models.py
+    models_py = re.sub(',\)|\\n\)|,\\n\)', ')', ''.join(models_py))
     return models_py, admin_py
-
-
-def rel(*x):
-    return os.path.normpath(
-        os.path.join(os.path.abspath(os.path.dirname(__file__)), *x),
-    )
 
 
 def main():
@@ -90,29 +92,16 @@ def main():
 
     model_source = load(open(f))
 
-    grammar = DEFAULT_GRAMMARISH
-    if '--grammar' in m_args.assignments:
-        f = m_args.assignments['--grammar']
-        if not os.path.exists(f):
-            simple_error('no such file: {}'.format(f))
-        grammar = load(open(f))
-    extra_grammar = {}
-    if '--extra-grammar' in m_args.assignments:
-        f = m_args.assignments['--extra-grammar']
-        if not os.path.exists(f):
-            simple_error('no such file: {}'.format(f))
-        extra_grammar = load(open(f))
-        grammar.update(extra_grammar)
-
-    models_py, admin_py = generate_source(model_source, grammar)
+    models_py, admin_py = generate_source(model_source, DEFAULT_GRAMMARISH)
 
     print '############ FILE data/models.py ############\n', models_py
     print '############ FILE data/admin.py ############\n', admin_py
 
     var = raw_input("Press <y> to replace files or <n> to cancel.\n")
+    apps_dir = settings.root('apps')
     if var is 'y':
         for name in ['admin.py', 'models.py']:
-            with open(APPS_DIR + '/data/' + name, 'w') as s_file:
+            with open(apps_dir + '/data/' + name, 'w') as s_file:
                 if 'admin' in name:
                     s_file.write(admin_py)
                 else:

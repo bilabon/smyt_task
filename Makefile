@@ -34,6 +34,9 @@ init_syncdb:
 	$(MAKE) manage -e CMD="migrate"
 	$(MANAGE) createsuperuser
 
+temp:
+	python generate.py smyt_task/apps/core/model.yml
+
 migrate:
 	python generate.py smyt_task/apps/core/model.yml
 	-$(MANAGE) schemamigration data --auto
