@@ -9,7 +9,7 @@ from .models import User
 @ajax_request
 @csrf_exempt
 def list_users(request):
-    """List of all users api requests.
+    """API for Users.
     If request.GET: return all Users
     If request.POST: Create User
     """
@@ -48,4 +48,4 @@ def edit_user(request, pk):
             return {'success': False, 'message': 'Wrong ID'}
         return {'success': True}
     else:
-        return {'success': False, 'message': 'Not valid request!'}
+        return {'success': False, 'message': 'Not valid request'}
