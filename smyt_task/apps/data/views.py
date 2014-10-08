@@ -1,4 +1,3 @@
-#from django.shortcuts import render
 import json
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
