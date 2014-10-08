@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('paycheck', self.gf('django.db.models.fields.IntegerField')()),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
-            ('date_joined', self.gf('django.db.models.fields.DateTimeField')()),
+            ('date_joined', self.gf('django.db.models.fields.DateField')()),
         ))
         db.send_create_signal(u'data', ['User'])
 
@@ -43,7 +43,7 @@ class Migration(SchemaMigration):
         },
         u'data.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {}),
+            'date_joined': ('django.db.models.fields.DateField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'paycheck': ('django.db.models.fields.IntegerField', [], {})

@@ -4,22 +4,19 @@ from django.db import models
 class User(models.Model):
     """This is the user model"""
 
-    paycheck = models.IntegerField()
+    paycheck = models.IntegerField(
+        blank=False)
     name = models.CharField(
         max_length=200,
-        blank=True)
-    date_joined = models.DateTimeField(
-        'Date of joining')
-
-    def __unicode__(self):
-        return self.name
+        blank=False)
+    date_joined = models.DateField(
+        'Date of joining',
+        blank=False)
 
 
 class Room(models.Model):
     department = models.CharField(
         max_length=200,
-        blank=True)
-    spots = models.IntegerField()
-
-    def __unicode__(self):
-        return self.department
+        blank=False)
+    spots = models.IntegerField(
+        blank=False)

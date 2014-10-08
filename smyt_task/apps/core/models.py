@@ -6,18 +6,23 @@ default = '''User:
     name:
         type: char
         max_length: 200
+        blank: false
     date_joined:
-        type: datetime
+        type: date
         args: Date of joining
+        blank: false
     paycheck:
         type: int
+        blank: false
 
 Room:
     department:
         type: char
+        blank: false
         max_length: 200
     spots:
-        type: int'''
+        type: int
+        blank: false'''
 
 
 class Setting(models.Model):

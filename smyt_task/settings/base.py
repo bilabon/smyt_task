@@ -10,8 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-#import datetime
 import sys
+
 
 # Get absolute path for current directory
 def rel(*x):
@@ -66,7 +66,7 @@ TEMPLATE_DIRS = (
     root('templates'),
 )
 
-#WSGI_APPLICATION = 'wsgi.application'
+# WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database

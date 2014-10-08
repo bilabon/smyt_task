@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style type="text/css">
+    table{background:#CCC;border:1px solid #000;}
+    table td{padding:15px;border:1px solid #DDD;}
+</style>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+</head>
+
+<body>
+<div id="dynamictable"></div>
+</body>
+
+<script>
+$('#dynamictable').append('<table></table>');
+
+var table = $('#dynamictable').children();
+
+var draw_td = function(pk, key, value, add_class) {
+    // Draw <td>some..</td>
+    td = '<td><input type="text" ' + add_class + ' maxlength="200" data-pk="' + pk + '" data-key="' + key + '" value="' + value + '"></td>'
+    return td;
+};
+var draw_head_table = function(value){
+    // Drawing names of table columns
+    row = '<tr><td>ID</td>'
+    $.each( value['users'][0]['fields'], function( key, value ) {
+        row += '<td>' + key + '</td>'
+    })
+    row += '</tr>'
+    return row;
+};
+
+var each_value = function(value){
+    // Drawing table rows
+    $.each( value['users'], function( key, value ) {
+
+        $.each( value, function( key, value ) {
+            if (key == 'pk'){
+                pk = value
+                row = '<tr>'
+                row += draw_td(pk, key, value, add_class='readonly="readonly"');
+                //console.log( key + ": " + value  + ": " + pk);
+            }
+            if (key == 'fields'){
+                $.each( value, function( key, value ) {
+                    if (key=='date_joined'){
+                        row += draw_td(pk, key, value, add_class='class="datepicker" readonly="readonly"');
+                    }
+                    else{
+                        row += draw_td(pk, key, value, add_class='');
+                    }
+                });
+            row += '</tr>'
+            table.append(row)
+            }
+
+
+        });
+        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+    });
+}
+
+$.ajax({
+    type: 'GET',
+    url: '/api/v1/users/',
+    data: {},
+    complete: function(r){
+        value = jQuery.parseJSON(r.responseText)
+        table.append(draw_head_table(value));
+        each_value(value);
+
+
+    $('input').change(function(){
+        $this = $(this);
+
+        var pk = $this.attr('data-pk')
+        var key = $this.attr('data-key')
+        var value = $this.val()
+        var error = false
+
+        console.log('!pk=' + pk)
+        console.log('!key=' + key)
+        console.log('!value=' + value)
+
+        if ($this.attr('data-key') == 'paycheck'){
+            var val = $this.val()
+            if ($.isNumeric(val)==true){
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/v1/users/',
+                    data: {},
+                })
+                console.log('OK')
+                $this.css("background-color", "white");
+                error = false
+            }
+            else{
+                console.log('Error')
+                $this.css("background-color", "red");
+                error = true
+            }
+        }
+        if (error == false){
+            // if not error then update input
+            $this.effect("highlight", {color:"green"}, 500);
+            var data = { };
+            data[key] = value;
+            url = '/api/v1/users/' + pk + '/';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                complete: function(r){
+                    value = jQuery.parseJSON(r.responseText)
+                    //console.log('r.responseText=' + r.responseText)
+                    //console.log('value=' + value['success'])
+                    if (value['success'] == false){
+                        console.log('Error in updating. ' + value['message'])
+                    }
+
+                }
+            })
+        }
+
+    });
+    }
+});
+
+//table.append("<tr><td>a1</td><td>b1</td></tr>");
+//table.append("<tr><td>c</td><td>d</td></tr>");
+</script>
+</html>
