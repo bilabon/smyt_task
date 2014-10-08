@@ -43,7 +43,6 @@ def edit_user(request, pk):
         user = User.objects.filter(id=pk)
         if user.exists():
             user.update(**form.cleaned_data)
-            user = serializers.serialize('json', user)
         else:
             return {'success': False, 'message': 'Wrong ID'}
         return {'success': True}
