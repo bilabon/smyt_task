@@ -38,11 +38,13 @@ def edit_user(request, pk):
 
     print 'edit_user pk=', pk
     if request.method == 'POST':
-        form = UserForm(request.POST)
-        form.is_valid()
         user = User.objects.filter(id=pk)
         if user.exists():
-            user.update(**form.cleaned_data)
+            form = UserForm(request.POST)
+            form.is_valid()
+            data = form.cleaned_data
+            data = {key: value for key, value in data.items() if value}
+            user.update(**data)
         else:
             return {'success': False, 'message': 'Wrong ID'}
         return {'success': True}
