@@ -16,6 +16,7 @@
 </body>
 
 <script>
+var model = 'users'
 $('#dynamictable').append('<table></table>');
 
 var table = $('#dynamictable').children();
@@ -28,7 +29,7 @@ var draw_td = function(pk, key, value, add_class) {
 var draw_head_table = function(value){
     // Drawing names of table columns
     row = '<tr><td>ID</td>'
-    $.each( value['users'][0]['fields'], function( key, value ) {
+    $.each( value[model][0]['fields'], function( key, value ) {
         row += '<td>' + key + '</td>'
     })
     row += '</tr>'
@@ -37,7 +38,7 @@ var draw_head_table = function(value){
 
 var each_value = function(value){
     // Drawing table rows
-    $.each( value['users'], function( key, value ) {
+    $.each( value[model], function( key, value ) {
 
         $.each( value, function( key, value ) {
             if (key == 'pk'){
@@ -67,7 +68,7 @@ var each_value = function(value){
 
 $.ajax({
     type: 'GET',
-    url: '/api/v1/users/',
+    url: '/api/v1/' + model + '/',
     data: {},
     complete: function(r){
         value = jQuery.parseJSON(r.responseText)
@@ -92,7 +93,7 @@ $.ajax({
             if ($.isNumeric(val)==true){
                 $.ajax({
                     type: 'GET',
-                    url: '/api/v1/users/',
+                    url: '/api/v1/' + model + '/',
                     data: {},
                 })
                 console.log('OK')
@@ -108,12 +109,11 @@ $.ajax({
         if (error == false){
             // if not error then update input
             $this.effect("highlight", {color:"green"}, 500);
-            var data = { };
+            var data = {};
             data[key] = value;
-            url = '/api/v1/users/' + pk + '/';
             $.ajax({
                 type: 'POST',
-                url: url,
+                url: '/api/v1/' + model + '/' + pk + '/',
                 data: data,
                 complete: function(r){
                     value = jQuery.parseJSON(r.responseText)
