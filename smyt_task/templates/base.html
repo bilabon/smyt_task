@@ -20,16 +20,15 @@
 
 <script>
 
-//var model = 'users';
-main(model='users')
-create(model='users')
+main(model='users');
+create(model='users');
 
 
 var draw_input = function(pk, key, value, add_class, str) {
     // Draw input
     if (key=='date_joined'){
-        add_class += ' datepicker'
-        str += 'readonly="readonly"'
+        add_class += ' datepicker';
+        str += 'readonly="readonly"';
     }
     td = '<input type="text" ' + str + 'class="' + add_class + '" name="' + key + '" maxlength="200" data-pk="' + pk + '" data-key="' + key + '" value="' + value + '" data-error="false">';
     return td;
@@ -41,7 +40,7 @@ var draw_head_table = function(value){
     row = '<tr><td>ID</td>';
     $.each( value[model][0]['fields'], function( key, value ) {
         row += '<td>' + key + '</td>';
-    })
+    });
     row += '</tr>';
     return row;
 };
@@ -57,7 +56,6 @@ var each_value = function(value){
                 row = '<tr><td>';
                 row += draw_input(pk, key, value, add_class='update', str='readonly="readonly"');
                 row += '</td>';
-                //console.log( key + ": " + value  + ": " + pk);
             }
             if (key == 'fields'){
                 $.each( value, function( key, value ) {
@@ -73,13 +71,14 @@ var each_value = function(value){
 
         });
         $('.datepicker').datepicker( "destroy" );
-        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' })
+        $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
     });
-}
+};
 
 
 function main(model){
-    $('table#main').remove()
+    // Create table with all users
+    $('table#main').remove();
     $('#dynamictable').append('<table id="main"></table>');
     table = $('#dynamictable').children();
     $.ajax({
@@ -87,10 +86,9 @@ function main(model){
         url: '/api/v1/' + model + '/',
         data: {},
         complete: function(r){
-            value = jQuery.parseJSON(r.responseText)
+            value = jQuery.parseJSON(r.responseText);
             table.append(draw_head_table(value));
             each_value(value);
-
 
         $('input.update').change(function(){
             $this = $(this);
@@ -98,35 +96,29 @@ function main(model){
             var pk = $this.attr('data-pk');
             var key = $this.attr('data-key');
             var value = $this.val();
-            //var error = false;
 
-            console.log('!pk=' + pk)
-            console.log('!key=' + key)
-            console.log('!value=' + value)
+            console.log('!pk=' + pk);
+            console.log('!key=' + key);
+            console.log('!value=' + value);
 
-            validate($(this))
-            //console.log('!errorerror=' + error)
+            validate($(this));
 
             if ($this.attr('data-error') == 'false'){
                 // if not error then update input
                 $this.effect("highlight", {color:"green"}, 500);
                 var data = {};
                 data[key] = value;
-                console.log(data)
                 $.ajax({
                     type: 'POST',
                     url: '/api/v1/' + model + '/' + pk + '/',
                     data: data,
                     complete: function(r){
                         value = jQuery.parseJSON(r.responseText);
-                        //console.log('r.responseText=' + r.responseText)
-                        //console.log('value=' + value['success'])
-                        if (value['success'] == false){
-                            console.log('Error in updating. ' + value['message'])
+                        if (value['success'] === false){
+                            console.log('Error in updating. ' + value['message']);
                         }
-
                     }
-                })
+                });
             }
 
         });
@@ -141,133 +133,100 @@ function error(bgcolor, status){
     $this.attr('data-error', status);
 }
 
+
 function validate(th){
-    //console.log('++++' + $(th).val())
-    $this = $(th)
     // Fields validation
+    $this = $(th);
     var val = $this.val();
-    console.log('++++' + val)
 
     if ($this.attr('data-key') == 'paycheck'){
 
-        if ($.isNumeric(val)==true){
-            console.log('OK')
-            status = 'false'
-            error('white', status)
+        if ($.isNumeric(val) === true){
+            console.log('OK');
+            status = 'false';
+            error('white', status);
 
         }
         else{
-            console.log('Error')
-            status = 'true'
-            error('red', status)
+            console.log('Error');
+            status = 'true';
+            error('red', status);
         }
     }
     else{
-        if (val == ''){
-            status = 'true'
-            error('red', status)
+        if (val === ''){
+            console.log('OK!');
+            status = 'true';
+            error('red', status);
         }
         else{
-            status = 'false'
-            error('white', status)
+            console.log('Error!');
+            status = 'false';
+            error('white', status);
         }
     }
-    return status
+    return status;
 }
 
-$("#add_form").submit(function(e)
-{
-    var postData = $(this).serializeArray();
-    var formURL = $(this).attr("action");
-    $.ajax(
-    {
-        url : formURL,
-        type: "POST",
-        data : postData,
-        success:function(data, textStatus, jqXHR)
-        {
-            //data: return data from server
-        },
-        error: function(jqXHR, textStatus, errorThrown)
-        {
-            //if fails
-        }
-    });
-    //e.preventDefault(); //STOP default action
-    //e.unbind(); //unbind. to stop multiple form submit.
-});
 
 function send_form() {
-  var msg   = $('#add_form').serialize();
-  var formURL = $('#add_form').attr("action");
-    $.ajax({
-      type: 'POST',
-      url: formURL,
-      data: msg,
-      success: function(data) {
+var msg   = $('#add_form').serialize();
+console.log('msg'+msg);
+var formURL = $('#add_form').attr("action");
+$.ajax({
+    type: 'POST',
+    url: formURL,
+    data: msg,
+    success: function(data){
         console.log(data);
-      },
-      error:  function(xhr, str){
-            console.log('Возникла ошибка: ' + xhr.responseCode);
-        }
-    });
+        main(model='users');
+    },
+    error:  function(xhr, str){
+        console.log('Some error: ' + xhr.responseCode);
+    }
+});
 
 }
 
 function create(model){
+    // Here we add ability to create user
+
     $('#add_record').append('<form id="add_form" method="post" action="' + '/api/v1/' + model + '/' + '" ><table></table></form>');
     var add_record_table = $('#add_record').children().children();
-    add_record_table.append('<tr><td>Add new User');
-    //table = $('#dynamictable').children();
+    add_record_table.append('<tr><td>Add new User</td></tr>');
+
+    //Getting names of User fields from api '/api/v1/users/fields/'
     $.ajax({
         type: 'GET',
         url: '/api/v1/' + model + '/fields/',
         data: {},
         complete: function(r){
-            create_values = jQuery.parseJSON(r.responseText)
+            create_values = jQuery.parseJSON(r.responseText);
             $.each( create_values, function( id, field ) {
-
                 input = draw_input(pk='', key=field, value='', add_class='create', str='');
-                add_record_table.append('<tr><td>' + field + '&nbsp;' + input + '</td></tr>')
-                $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' })
-            })
-            add_record_table.append('<tr><td><input type="button" value="Create"></td></tr>')
+                add_record_table.append('<tr><td>' + field + '&nbsp;' + input + '</td></tr>');
+                $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+            });
+
+            add_record_table.append('<tr><td><input type="button" value="Create"></td></tr>');
             $('input.create').change(function(){
-                validate($(this))
+                validate($(this));
             });
 
             $("input[type='button']").click(function () {
-                console.log(create_values)
-                var error = false
+                console.log(create_values);
+                var error = false;
                 $.each( create_values, function( id, field ) {
-                    if (validate( $("input.create[name='" + field + "']")[0]) == 'true' & error == false){error = true}
-                })
-                if (error == false){
-
-                      var msg   = $('#add_form').serialize();
-                      console.log('msg'+msg)
-                      var formURL = $('#add_form').attr("action");
-                        $.ajax({
-                          type: 'POST',
-                          url: formURL,
-                          data: msg,
-                          success: function(data) {
-                            console.log(data);
-                            main(model='users')
-                          },
-                          error:  function(xhr, str){
-                                console.log('Some error: ' + xhr.responseCode);
-                            }
-                        });
+                    if (validate( $("input.create[name='" + field + "']")[0]) === 'true' & error === false){error = true;}
+                });
+                if (error === false){
+                    send_form();
                 }
-            })
+            });
         }
-    })
+    });
 }
 
 
-
-//table.append("<tr><td>a1</td><td>b1</td></tr>");
-//table.append("<tr><td>c</td><td>d</td></tr>");
 </script>
 </html>
