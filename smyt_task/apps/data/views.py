@@ -6,6 +6,9 @@ from .forms import UserForm
 from .models import User
 
 
+not_valid_request = {'success': False, 'message': 'Not valid request'}
+
+
 @ajax_request
 @csrf_exempt
 def list_users(request):
@@ -28,14 +31,13 @@ def list_users(request):
         user = serializers.serialize('json', [user])
         return {'success': True, 'user': json.loads(user)}
     else:
-        return {'success': False, 'message': 'Not valid request'}
+        return not_valid_request
 
 
 @ajax_request
 @csrf_exempt
 def edit_user(request, pk):
     """Edit User by given ID"""
-
     print 'edit_user pk=', pk
     if request.method == 'POST':
         user = User.objects.filter(id=pk)
@@ -49,4 +51,16 @@ def edit_user(request, pk):
             return {'success': False, 'message': 'Wrong ID'}
         return {'success': True}
     else:
-        return {'success': False, 'message': 'Not valid request'}
+        return not_valid_request
+
+
+@ajax_request
+@csrf_exempt
+def user_fields(request):
+    if request.method == 'GET':
+        fields = User._meta.get_all_field_names()
+        if 'id' in fields:
+            fields.remove('id')
+        return fields
+    else:
+        return not_valid_request

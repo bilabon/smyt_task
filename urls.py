@@ -13,6 +13,7 @@ urlpatterns = patterns(
         name='api_list_users'),
     url(r'^api/v1/users/(?P<pk>\d+)/$', 'data.views.edit_user',
         name='api_edit_user'),
-
+    url(r'^api/v1/users/fields/$', 'data.views.user_fields',
+        name='api_user_fields'),
 
 )
