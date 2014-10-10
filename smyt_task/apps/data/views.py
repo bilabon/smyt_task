@@ -57,6 +57,7 @@ def edit_user(request, pk):
 @ajax_request
 @csrf_exempt
 def user_fields(request):
+    """Return all field names of model User"""
     if request.method == 'GET':
         fields = User._meta.get_all_field_names()
         if 'id' in fields:
