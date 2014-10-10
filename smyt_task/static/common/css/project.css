@@ -1,0 +1,16 @@
+table {
+    background: #CCC;
+    border: 1px solid #000;
+}
+table td {
+    padding: 1px;
+    border: 1px solid #DDD;
+}
+
+.active {
+    font-weight: bold;
+}
+.table_choice{
+    vertical-align: middle;
+    display: table-cell;
+}
