@@ -16,7 +16,6 @@ def list_users(request):
     If request.GET: return all Users
     If request.POST: Create User
     """
-    print 'list_users'
     if request.method == 'GET':
         users = serializers.serialize('json', User.objects.all())
         return {'success': True, 'users': json.loads(users)}
@@ -38,7 +37,6 @@ def list_users(request):
 @csrf_exempt
 def edit_user(request, pk):
     """Edit User by given ID"""
-    print 'edit_user pk=', pk
     if request.method == 'POST':
         user = User.objects.filter(id=pk)
         if user.exists():
@@ -73,7 +71,6 @@ def list_rooms(request):
     If request.GET: return all Room
     If request.POST: Create Room
     """
-    print 'list_users'
     if request.method == 'GET':
         rooms = serializers.serialize('json', Room.objects.all())
         return {'success': True, 'rooms': json.loads(rooms)}
@@ -95,7 +92,6 @@ def list_rooms(request):
 @csrf_exempt
 def edit_room(request, pk):
     """Edit Room by given ID"""
-    print 'edit_user pk=', pk
     if request.method == 'POST':
         room = Room.objects.filter(id=pk)
         if room.exists():
