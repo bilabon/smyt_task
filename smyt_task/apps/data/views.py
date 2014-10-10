@@ -55,7 +55,6 @@ def edit_user(request, pk):
 
 
 @ajax_request
-@csrf_exempt
 def user_fields(request):
     """Return all field names of model User"""
     if request.method == 'GET':
@@ -113,7 +112,6 @@ def edit_room(request, pk):
 
 
 @ajax_request
-@csrf_exempt
 def room_fields(request):
     """Return all field names of model Room"""
     if request.method == 'GET':
