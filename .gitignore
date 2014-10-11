@@ -9,4 +9,4 @@
 .env
 venv
 staticfiles
-
+smyt_task/static
