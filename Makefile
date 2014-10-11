@@ -4,8 +4,6 @@
 PROJECT       = smyt_task
 HOST          = 127.0.0.1
 PORT          = 8895
-#CURRPATH      = $(shell pwd)
-#PIDFILE       = $(shell pwd)/etc/django.pid
 
 #PROJECT_TEST_TARGETS=data
 PYTHONPATH=.:..
@@ -30,14 +28,10 @@ shell:
 
 init_syncdb:
 	$(MAKE) clean
-	$(MANAGE) syncdb --noinput
+	$(MANAGE) syncdb
 	$(MAKE) manage -e CMD="migrate"
-	$(MANAGE) createsuperuser
 
-temp:
-	python generate.py smyt_task/apps/core/model.yml
-
-migrate:
+migrate_data:
 	python generate.py smyt_task/apps/core/model.yml
 	-$(MANAGE) schemamigration data --auto
 	$(MANAGE) migrate data

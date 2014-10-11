@@ -9,46 +9,48 @@ function main(model) {
         data: {},
         complete: function (r) {
             value = jQuery.parseJSON(r.responseText);
-            table.append(draw_head_table(value));
-            each_value(value);
-            $('.update.datepicker').datepicker("destroy");
-            $('.update.datepicker').datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
-            $('input.update').change(function () {
-                $this = $(this);
+            if (!jQuery.isEmptyObject(value[model])){
+                table.append(draw_head_table(value));
+                each_value(value);
+                $('.update.datepicker').datepicker("destroy");
+                $('.update.datepicker').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+                $('input.update').change(function () {
+                    $this = $(this);
 
-                var pk = $this.attr('data-pk');
-                var key = $this.attr('data-key');
-                var value = $this.val();
+                    var pk = $this.attr('data-pk');
+                    var key = $this.attr('data-key');
+                    var value = $this.val();
 
-                console.log('main() pk: ' + pk);
-                console.log('main() key: ' + key);
-                console.log('main() value: ' + value);
+                    console.log('main() pk: ' + pk);
+                    console.log('main() key: ' + key);
+                    console.log('main() value: ' + value);
 
-                validate($(this));
+                    validate($(this));
 
-                if ($this.attr('data-error') == 'false') {
-                    // if not error then update input
-                    $this.effect("highlight", {
-                        color: "green"
-                    }, 500);
-                    var data = {};
-                    data[key] = value;
-                    $.ajax({
-                        type: 'POST',
-                        url: '/api/v1/' + model + '/' + pk + '/',
-                        data: data,
-                        complete: function (r) {
-                            value = jQuery.parseJSON(r.responseText);
-                            if (value['success'] === false) {
-                                console.log('main() Some error: ' + value['message']);
+                    if ($this.attr('data-error') == 'false') {
+                        // if not error then update input
+                        $this.effect("highlight", {
+                            color: "green"
+                        }, 500);
+                        var data = {};
+                        data[key] = value;
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/v1/' + model + '/' + pk + '/',
+                            data: data,
+                            complete: function (r) {
+                                value = jQuery.parseJSON(r.responseText);
+                                if (value['success'] === false) {
+                                    console.log('main() Some error: ' + value['message']);
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
-            });
+                });
+            }
         }
     });
 }
