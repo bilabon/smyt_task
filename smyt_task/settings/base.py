@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import dj_database_url
 
 
 # Get absolute path for current directory
@@ -67,6 +68,7 @@ TEMPLATE_DIRS = (
 )
 
 # WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = 'smyt_task.wsgi.application'
 
 
 # Database
@@ -78,6 +80,15 @@ DATABASES = {
         'NAME': root('..', 'dev.db'),
     }
 }
+
+# Parse database configuration from $DATABASE_URL
+DATABASES['default'] =  dj_database_url.config()
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

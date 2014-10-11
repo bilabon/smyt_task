@@ -6,4 +6,7 @@
 *.mo
 *.DS_Store
 *.yml
-.env/
+.env
+venv
+staticfiles
+
