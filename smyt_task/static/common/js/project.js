@@ -1,5 +1,6 @@
 function main(model) {
     // Create table with all users
+    $("#dynamictable").css("visibility", "hidden");
     $('table#main').remove();
     $('#dynamictable').append('<table id="main"></table>');
     table = $('#dynamictable').children();
@@ -50,6 +51,7 @@ function main(model) {
                     }
 
                 });
+            $("#dynamictable").css("visibility", "visible");
             }
         }
     });
@@ -58,6 +60,7 @@ function main(model) {
 
 function create(model) {
     // Here we add ability to create user
+    $("#add_record").css("visibility", "hidden");
     $('table#create').remove();
     $('#add_form').remove();
     $('#add_record').append('<form id="add_form" method="post" action="' + '/api/v1/' + model + '/' + '" ><table id="create"></table></form>');
@@ -96,6 +99,7 @@ function create(model) {
                     send_form(model);
                 }
             });
+        $("#add_record").css("visibility", "visible");
         }
     });
 }
