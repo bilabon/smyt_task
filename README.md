@@ -11,6 +11,7 @@ cd smyt_task
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt --allow-all-external
+mv smyt_task/settings/local.py.template smyt_task/settings/local.py
 make test
 make init_syncdb
 make migrate_data
