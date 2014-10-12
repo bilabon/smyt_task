@@ -1,7 +1,7 @@
 Smyt_task
 =========
 
-Test task Smyt's company.
+Test task for Smyt company.
 
 Installation
 --------------
