@@ -77,7 +77,7 @@ class RoomTest(WebTest):
 
     def test_model_create(self):
         """
-        Tests get/create User.
+        Tests get/create Room.
         """
         Room.objects.create(department='#1', spots=11)
         obj_room = Room.objects.get(department='#1')
