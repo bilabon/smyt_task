@@ -10,3 +10,4 @@
 venv
 staticfiles
 smyt_task/static
+local.py
