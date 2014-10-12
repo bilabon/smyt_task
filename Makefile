@@ -5,7 +5,7 @@ PROJECT       = smyt_task
 HOST          = 127.0.0.1
 PORT          = 8895
 
-#PROJECT_TEST_TARGETS=data
+PROJECT_TEST_TARGETS=data core
 PYTHONPATH=.:..
 
 MANAGE=cd $(PROJECT) && PYTHONPATH=$(PYTHONPATH) DJANGO_SETTINGS_MODULE=$(PROJECT).settings django-admin.py
