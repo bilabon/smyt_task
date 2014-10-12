@@ -132,4 +132,4 @@ STATIC_URL = '/static/'
 try:
     from local import *
 except:
-    print 'please add utils.py'
+    print 'please add local.py'
