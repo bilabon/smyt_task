@@ -19,7 +19,7 @@ make run
 
 Information
 --------------
- - You can set structure of models here `/admin/core/setting/1/`. After saving you can see a updated file `model.yml` in directory apps's core. Then you can migrate it by command `make migrate_data`
+ - You can set structure of models here `/admin/core/setting/1/`. After saving you can see the updated file `model.yml` in directory apps's core. Then you can migrate it by command `make migrate_data`
  - You can modify, update and create Users and Rooms at `https://smyt-task.herokuapp.com`
 
 ##### Working with grammarish
