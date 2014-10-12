@@ -48,7 +48,8 @@ time: TimeField
 url: URLField
 fk: ForeignKey
 m2m: ManyToManyField
-timestamp: DateTimeField```
+timestamp: DateTimeField
+```
 
 ##### Syntax
 
