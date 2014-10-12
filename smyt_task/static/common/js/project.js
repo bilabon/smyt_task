@@ -163,7 +163,7 @@ function validate(th) {
 
     if ($this.attr('data-key') == 'paycheck' || $this.attr('data-key') == 'spots') {
 
-        if ($.isNumeric(val) === true) {
+        if ($.isNumeric(val) === true & val == Math.floor(val)) {
             console.log('validate() OK');
             status = 'false';
             error('white', status);
