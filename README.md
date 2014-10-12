@@ -51,6 +51,7 @@ m2m: ManyToManyField
 timestamp: DateTimeField```
 
 ##### Syntax
+
 ```sh
 <ModelName>:
     [doc: docstring]
