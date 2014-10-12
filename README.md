@@ -63,6 +63,7 @@ timestamp: DateTimeField
 
 Example:
 Room:
+    doc: This is the room model
     department:
         type: char
         blank: false
