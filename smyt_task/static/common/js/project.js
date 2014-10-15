@@ -1,18 +1,18 @@
-function main(model) {
+function table_main(model) {
     // Create table with all users
     $("#dynamictable").css("visibility", "hidden");
     $('table#main').remove();
     $('#dynamictable').append('<table id="main"></table>');
-    table = $('#dynamictable').children();
+    var table = $('#dynamictable').children();
     $.ajax({
         type: 'GET',
         url: '/api/v1/' + model + '/',
         data: {},
         complete: function (r) {
-            value = jQuery.parseJSON(r.responseText);
-            if (!jQuery.isEmptyObject(value[model])){
+            var value = jQuery.parseJSON(r.responseText);
+            if (!jQuery.isEmptyObject(value[model])) {
                 table.append(draw_head_table(value));
-                each_value(value);
+                table.append(each_value(value));
                 $('.update.datepicker').datepicker("destroy");
                 $('.update.datepicker').datepicker({
                     dateFormat: 'yy-mm-dd'
@@ -24,9 +24,9 @@ function main(model) {
                     var key = $this.attr('data-key');
                     var value = $this.val();
 
-                    console.log('main() pk: ' + pk);
-                    console.log('main() key: ' + key);
-                    console.log('main() value: ' + value);
+                    console.log('table_main() pk: ' + pk);
+                    console.log('table_main() key: ' + key);
+                    console.log('table_main() value: ' + value);
 
                     validate($(this));
 
@@ -42,16 +42,16 @@ function main(model) {
                             url: '/api/v1/' + model + '/' + pk + '/',
                             data: data,
                             complete: function (r) {
-                                value = jQuery.parseJSON(r.responseText);
+                                var value = jQuery.parseJSON(r.responseText);
                                 if (value['success'] === false) {
-                                    console.log('main() Some error: ' + value['message']);
+                                    console.log('table_main() Some error: ' + value['message']);
                                 }
                             }
                         });
                     }
 
                 });
-            $("#dynamictable").css("visibility", "visible");
+                $("#dynamictable").css("visibility", "visible");
             }
         }
     });
@@ -73,9 +73,9 @@ function create(model) {
         url: '/api/v1/' + model + '/fields/',
         data: {},
         complete: function (r) {
-            create_values = jQuery.parseJSON(r.responseText);
+            var create_values = jQuery.parseJSON(r.responseText);
             $.each(create_values, function (id, field) {
-                input = draw_input(pk = '', key = field, value = '', add_class = 'create', str = '');
+                var input = draw_input(pk = '', key = field, value = '', add_class = 'create', str = '');
                 add_record_table.append('<tr><td>' + field + '&nbsp;' + input + '</td></tr>');
                 $('.create.datepicker').datepicker("destroy");
                 $('.create.datepicker').datepicker({
@@ -99,54 +99,56 @@ function create(model) {
                     send_form(model);
                 }
             });
-        $("#add_record").css("visibility", "visible");
+            $("#add_record").css("visibility", "visible");
         }
     });
 }
 
 
-var each_value = function (value) {
-    // Drawing table rows
+function each_value(value) {
+    // Creating table rows
+    var table_rows = '';
+    var pk;
     $.each(value[model], function (key, value) {
 
         $.each(value, function (key, value) {
             if (key == 'pk') {
                 pk = value;
-                row = '<tr><td>';
-                row += draw_input(pk, key, value, add_class = 'update', str = 'readonly="readonly"');
-                row += '</td>';
+                table_rows += '<tr><td>';
+                table_rows += draw_input(pk, key, value, add_class = 'update', str = 'readonly="readonly"');
+                table_rows += '</td>';
             }
             if (key == 'fields') {
                 $.each(value, function (key, value) {
-                    row += '<td>';
-                    row += draw_input(pk, key, value, add_class = 'update', str = '');
-                    row += '</td>';
+                    table_rows += '<td>';
+                    table_rows += draw_input(pk, key, value, add_class = 'update', str = '');
+                    table_rows += '</td>';
 
                 });
-                row += '</tr>';
-                table.append(row);
+                table_rows += '</tr>';
             }
 
 
         });
     });
-};
+    return table_rows;
+}
 
 
-var draw_input = function (pk, key, value, add_class, str) {
+function draw_input(pk, key, value, add_class, str) {
     // Draw input
     if (key == 'date_joined') {
         add_class += ' datepicker';
         str += 'readonly="readonly"';
     }
-    td = '<input type="text" ' + str + 'class="' + add_class + '" name="' + key + '" maxlength="200" data-pk="' + pk + '" data-key="' + key + '" value="' + value + '" data-error="false">';
+    var td = '<input type="text" ' + str + 'class="' + add_class + '" name="' + key + '" maxlength="200" data-pk="' + pk + '" data-key="' + key + '" value="' + value + '" data-error="false">';
     return td;
-};
+}
 
 
 var draw_head_table = function (value) {
     // Drawing names of table columns
-    row = '<tr><td>ID</td>';
+    var row = '<tr><td>ID</td>';
     $.each(value[model][0]['fields'], function (key, value) {
         row += '<td>' + key + '</td>';
     });
@@ -199,7 +201,7 @@ function send_form(model) {
         data: msg,
         success: function (data) {
             console.log('send_form() Answer: ' + data);
-            main(model = model);
+            table_main(model = model);
         },
         error: function (xhr, str) {
             console.log('send_form() Some error: ' + xhr.responseCode);

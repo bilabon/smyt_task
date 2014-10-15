@@ -19,8 +19,8 @@ $(document).ready(function () {
     $(".table_choice").click(function () {
         $('.active').removeClass('active')
         $(this).addClass('active');
-        name_model = $(this).attr('data-name');
-        main(model = name_model);
+        var name_model = $(this).attr('data-name');
+        table_main(model = name_model);
         create(model = name_model);
     })
     $('.active').click()
