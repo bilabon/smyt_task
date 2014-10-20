@@ -95,8 +95,6 @@ ALLOWED_HOSTS = ['*']
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'Europe/Kiev'
-
 USE_I18N = True
 
 USE_L10N = True
